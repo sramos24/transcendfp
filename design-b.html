@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Transcend Fastpitch — App Native Concept</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#100810;
+  --panel:#1B1016;
+  --card:#241522;
+  --raise:#301C2C;
+  --mag:#A63A92;
+  --mag-lt:#CE55B6;
+  --mag-deep:#6E1F5F;
+  --white:#FFFFFF;
+  --mute:#B29CAC;
+  --dim:#7E6A79;
+  --edge:rgba(255,255,255,.09);
+  --edge-2:rgba(255,255,255,.16);
+  --f:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  --pad:clamp(18px,4.5vw,52px);
+  --r:20px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--void);color:var(--white);font-family:var(--f);
+  font-size:16.5px;line-height:1.62;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  padding-bottom:74px;
+}
+img{max-width:100%;display:block}
+a{color:inherit}
+h1,h2,h3,h4{margin:0;letter-spacing:-.03em;line-height:1.04;font-weight:800}
+p{margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding:0 var(--pad)}
+.sec{padding:clamp(64px,8.5vw,124px) 0;position:relative}
+.kicker{
+  font-size:11.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--mag-lt);margin-bottom:16px;
+}
+.lede{color:var(--mute);font-size:clamp(16px,1.5vw,18.5px);max-width:56ch;line-height:1.65}
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  font-family:var(--f);font-weight:700;font-size:15px;letter-spacing:-.01em;
+  text-decoration:none;padding:15px 26px;border-radius:999px;border:1.5px solid transparent;
+  cursor:pointer;transition:transform .2s,background .2s,color .2s,box-shadow .2s,border-color .2s;
+}
+.btn-mag{background:var(--mag);color:#fff;box-shadow:0 10px 30px -10px rgba(206,85,182,.6)}
+.btn-mag:hover{background:var(--mag-lt);transform:translateY(-2px);box-shadow:0 16px 40px -12px rgba(206,85,182,.75)}
+.btn-white{background:#fff;color:#20101C}
+.btn-white:hover{transform:translateY(-2px);background:#F5E9F3}
+.btn-line{border-color:var(--edge-2);color:#fff;background:transparent}
+.btn-line:hover{border-color:#fff;transform:translateY(-2px)}
+.btn-lg{padding:19px 36px;font-size:16.5px}
+:focus-visible{outline:2.5px solid var(--mag-lt);outline-offset:3px}
+
+/* ---------- nav ---------- */
+.nav{position:sticky;top:0;z-index:80;background:rgba(16,8,16,.82);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--edge)}
+.nav-in{display:flex;align-items:center;gap:26px;height:66px}
+.mark{display:flex;align-items:center;gap:10px;text-decoration:none;margin-right:auto}
+.mark svg{width:24px;height:24px;flex:none}
+.mark span{font-weight:800;font-size:16.5px;letter-spacing:.02em;text-transform:uppercase}
+.mark span em{font-style:normal;color:var(--mag-lt)}
+.nav-links{display:flex;gap:24px}
+.nav-links a{text-decoration:none;color:var(--mute);font-size:14.5px;font-weight:600}
+.nav-links a:hover{color:#fff}
+.nav .btn{padding:11px 20px;font-size:14px}
+.burger{display:none;background:none;border:1.5px solid var(--edge-2);color:#fff;border-radius:999px;
+  padding:9px 16px;font-family:var(--f);font-weight:700;font-size:13.5px;cursor:pointer}
+.mob{display:none;border-top:1px solid var(--edge);padding:10px var(--pad) 20px}
+.mob.open{display:block}
+.mob a{display:block;padding:13px 0;text-decoration:none;color:var(--mute);font-weight:600;
+  border-bottom:1px solid var(--edge)}
+
+/* ---------- hero ---------- */
+.hero{position:relative;overflow:hidden}
+.glow{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0}
+.glow-a{width:min(620px,90vw);height:min(620px,90vw);background:rgba(166,58,146,.4);top:-24%;right:-14%}
+.glow-b{width:min(420px,70vw);height:min(420px,70vw);background:rgba(110,31,95,.45);bottom:-30%;left:-14%}
+.hero-in{position:relative;z-index:1;display:grid;grid-template-columns:1.08fr .92fr;
+  gap:clamp(30px,5vw,66px);align-items:center;padding:clamp(44px,7vw,88px) 0 clamp(56px,7vw,96px)}
+.hero h1{font-size:clamp(2.5rem,6vw,4.6rem);max-width:12ch}
+.hero h1 em{font-style:normal;color:var(--mag-lt)}
+.hero .lede{margin:22px 0 30px}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.freebie{display:flex;align-items:center;gap:9px;margin-top:22px;color:var(--dim);font-size:13.5px;font-weight:600}
+.freebie i{width:7px;height:7px;border-radius:50%;background:#4ED08B;flex:none;
+  box-shadow:0 0 0 4px rgba(78,208,139,.16)}
+
+/* ---------- phone ---------- */
+.phone-stage{display:flex;justify-content:center;position:relative}
+.phone{
+  width:min(320px,80vw);border-radius:42px;padding:11px;background:linear-gradient(160deg,#3B2436,#170D15);
+  box-shadow:0 50px 90px -30px rgba(0,0,0,.85),0 0 0 1px rgba(255,255,255,.09);position:relative;z-index:2;
+}
+.screen{background:var(--panel);border-radius:32px;overflow:hidden;position:relative;
+  height:min(640px,72vh);min-height:520px;display:flex;flex-direction:column}
+.notch{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:88px;height:22px;
+  background:#0B060B;border-radius:999px;z-index:6}
+.st{display:flex;justify-content:space-between;padding:11px 20px 6px;font-size:11px;font-weight:700;color:#fff;z-index:5}
+.appbar{background:var(--mag);height:34px;display:flex;align-items:center;justify-content:flex-end;gap:16px;padding:0 16px}
+.appbar svg{width:15px;height:15px;opacity:.9}
+.app-hero{position:relative;height:118px;overflow:hidden;background:linear-gradient(140deg,#3E2438,#1B1016)}
+.app-hero img{width:100%;height:100%;object-fit:cover;opacity:.62}
+.app-hero h4{position:absolute;left:16px;bottom:12px;font-size:20px;letter-spacing:-.03em}
+.wtabs{display:flex;gap:2px;padding:0 6px;border-bottom:1px solid rgba(255,255,255,.06);overflow-x:auto;scrollbar-width:none}
+.wtabs::-webkit-scrollbar{display:none}
+.wtab{background:none;border:0;color:var(--dim);font-family:var(--f);font-weight:700;font-size:12.5px;
+  padding:13px 14px;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:color .2s}
+.wtab.on{color:var(--mag-lt);border-bottom-color:var(--mag-lt)}
+.dpills{display:flex;gap:8px;padding:14px 14px 10px}
+.dpill{flex:1;border-radius:999px;border:1px solid var(--edge-2);background:transparent;color:var(--mute);
+  font-family:var(--f);font-weight:700;font-size:12.5px;padding:9px 0;cursor:pointer;transition:.2s}
+.dpill.on{background:#fff;color:#20101C;border-color:#fff}
+.exhead{display:flex;justify-content:space-between;align-items:center;padding:4px 16px 10px;
+  font-size:12.5px;font-weight:700;color:var(--mute)}
+.exlist{flex:1;overflow-y:auto;padding:0 12px 14px;display:grid;gap:10px;scrollbar-width:thin}
+.ex{border-radius:14px;overflow:hidden;position:relative;min-height:104px;padding:14px;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  background:linear-gradient(135deg,#3A2334,#1A0F17);border:1px solid rgba(255,255,255,.05)}
+.ex::before{content:"";position:absolute;inset:0;background:
+  radial-gradient(120% 80% at 80% 0%,rgba(206,85,182,.28),transparent 60%)}
+.ex>*{position:relative;z-index:1}
+.ex b{font-size:15px;font-weight:800;letter-spacing:-.02em}
+.ex small{color:var(--mute);font-size:11.5px;display:block;margin:2px 0 9px}
+.ex .chip{display:inline-block;background:var(--mag);color:#fff;font-size:10.5px;font-weight:700;
+  padding:3px 9px;border-radius:5px;letter-spacing:.01em}
+.ex .reps{color:var(--dim);font-size:11.5px;margin-top:7px;font-weight:600}
+.navbar{background:var(--mag);height:52px;display:flex;align-items:center;justify-content:space-around;padding:0 12px}
+.navbar span{width:19px;height:19px;border-radius:5px;background:rgba(255,255,255,.75)}
+.navbar .plus{width:30px;height:30px;border-radius:9px;background:#fff;display:grid;place-items:center;
+  color:var(--mag);font-weight:800;font-size:19px;line-height:1}
+.phone-note{margin-top:18px;text-align:center;font-size:12.5px;color:var(--dim);font-weight:600}
+
+/* ---------- download band ---------- */
+.dl{background:linear-gradient(135deg,var(--mag) 0%,var(--mag-deep) 100%);position:relative;overflow:hidden}
+.dl::after{content:"";position:absolute;inset:0;background:
+  radial-gradient(70% 100% at 100% 0%,rgba(255,255,255,.16),transparent 62%);pointer-events:none}
+.dl-in{position:relative;z-index:1;display:grid;grid-template-columns:1.15fr .85fr;
+  gap:clamp(30px,5vw,64px);align-items:center;padding:clamp(56px,7vw,96px) 0}
+.dl h2{font-size:clamp(2.1rem,4.8vw,3.5rem);max-width:14ch}
+.dl p{color:rgba(255,255,255,.9);margin-top:18px;max-width:44ch;font-size:17px}
+.dl-btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+.qr-card{background:#fff;border-radius:24px;padding:24px;text-align:center;color:#20101C;
+  box-shadow:0 30px 60px -20px rgba(0,0,0,.5)}
+.qr-card svg{width:100%;max-width:186px;height:auto;margin:0 auto}
+.qr-card b{display:block;margin-top:16px;font-size:15px;font-weight:800;letter-spacing:-.02em}
+.qr-card small{display:block;color:#7A5E73;font-size:12.5px;font-weight:600;margin-top:3px}
+.steps{margin-top:26px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.18);
+  border-radius:18px;padding:6px}
+.step-tabs{display:flex;gap:4px;padding:4px}
+.step-tab{flex:1;border:0;background:transparent;color:rgba(255,255,255,.72);font-family:var(--f);
+  font-weight:700;font-size:13.5px;padding:10px;border-radius:12px;cursor:pointer;transition:.2s}
+.step-tab.on{background:#fff;color:#20101C}
+.step-body{padding:6px 16px 16px}
+.step-body ol{margin:0;padding-left:20px;color:rgba(255,255,255,.9);font-size:14.5px;line-height:1.85}
+.step-body ol li::marker{font-weight:800}
+
+/* ---------- feature grid ---------- */
+.feat{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:48px}
+.fcard{background:var(--card);border:1px solid var(--edge);border-radius:var(--r);padding:26px;
+  transition:transform .25s,border-color .25s,background .25s}
+.fcard:hover{transform:translateY(-4px);border-color:rgba(206,85,182,.45);background:var(--raise)}
+.fico{width:42px;height:42px;border-radius:12px;background:rgba(206,85,182,.16);display:grid;
+  place-items:center;margin-bottom:18px}
+.fico svg{width:20px;height:20px;stroke:var(--mag-lt);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.fcard h3{font-size:1.15rem;margin-bottom:9px}
+.fcard p{color:var(--mute);font-size:14.5px;line-height:1.6}
+
+/* ---------- real screens ---------- */
+.real{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(30px,5vw,64px);align-items:center}
+.shot{width:min(288px,74vw);margin:0 auto;border-radius:34px;padding:9px;
+  background:linear-gradient(160deg,#3B2436,#170D15);box-shadow:0 40px 80px -28px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.08)}
+.shot img{border-radius:26px;background:linear-gradient(150deg,#3E2438,#1B1016)}
+.real h2{font-size:clamp(1.9rem,4.2vw,3rem)}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:32px}
+.stat{background:var(--card);border:1px solid var(--edge);border-radius:16px;padding:20px}
+.stat b{display:block;font-size:1.85rem;font-weight:800;letter-spacing:-.04em;color:var(--mag-lt)}
+.stat small{color:var(--mute);font-size:12.5px;font-weight:600}
+
+/* ---------- coaching ---------- */
+.coach{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:46px}
+.ccard{border-radius:var(--r);overflow:hidden;background:var(--card);border:1px solid var(--edge);
+  display:flex;flex-direction:column}
+.ctop{height:132px;position:relative;background:linear-gradient(140deg,#3E2438,#1B1016);overflow:hidden}
+.ctop img{width:100%;height:100%;object-fit:cover;opacity:.72}
+.ctop .tag{position:absolute;left:14px;top:14px;background:var(--mag);color:#fff;font-size:10.5px;
+  font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:5px 11px;border-radius:6px}
+.cbody{padding:24px;display:flex;flex-direction:column;flex:1}
+.cbody h3{font-size:1.2rem;margin-bottom:10px}
+.cbody p{color:var(--mute);font-size:14.5px;margin-bottom:22px;flex:1}
+.cbody a{text-decoration:none;color:var(--mag-lt);font-weight:700;font-size:14px}
+.cbody a:hover{color:#fff}
+
+/* ---------- booking ---------- */
+.rows{margin-top:38px;display:grid;gap:8px}
+.row{display:grid;grid-template-columns:1fr auto auto;gap:20px;align-items:center;
+  background:var(--card);border:1px solid var(--edge);border-radius:16px;padding:18px 22px;
+  text-decoration:none;transition:.2s}
+.row:hover{background:var(--raise);border-color:rgba(206,85,182,.45);transform:translateX(4px)}
+.row strong{font-size:16px;font-weight:700;letter-spacing:-.02em;display:block}
+.row small{color:var(--dim);font-size:13.5px}
+.row .d{color:var(--mute);font-size:13.5px;font-weight:700;white-space:nowrap}
+.row .g{color:var(--mag-lt);font-weight:700;font-size:13.5px;white-space:nowrap}
+
+/* ---------- jiana ---------- */
+.bio{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(30px,5vw,64px);align-items:center}
+.bio-img{border-radius:var(--r);overflow:hidden;aspect-ratio:5/4;border:1px solid var(--edge);
+  background:linear-gradient(140deg,#3E2438,#1B1016)}
+.bio-img img{width:100%;height:100%;object-fit:cover}
+.bio h2{font-size:clamp(1.9rem,4.2vw,2.9rem);margin-bottom:20px}
+.bio p{color:var(--mute);margin-bottom:16px}
+
+/* ---------- final cta ---------- */
+.final{text-align:center;padding:clamp(66px,9vw,124px) 0;position:relative;overflow:hidden;
+  border-top:1px solid var(--edge)}
+.final h2{font-size:clamp(2.2rem,6vw,4.2rem);max-width:16ch;margin:0 auto}
+.final h2 em{font-style:normal;color:var(--mag-lt)}
+.final .lede{margin:22px auto 34px}
+.final .hero-cta{justify-content:center}
+
+/* ---------- footer ---------- */
+.foot{border-top:1px solid var(--edge);padding:44px 0 30px}
+.foot-in{display:flex;justify-content:space-between;gap:22px;flex-wrap:wrap;align-items:center;
+  color:var(--dim);font-size:13.5px;font-weight:600}
+.foot-in a{color:var(--mute);text-decoration:none}
+.foot-in a:hover{color:var(--mag-lt)}
+.note{margin-top:22px;padding-top:16px;border-top:1px solid var(--edge);font-size:12px;color:rgba(126,106,121,.75)}
+
+/* ---------- sticky install bar ---------- */
+.sticky{
+  position:fixed;left:0;right:0;bottom:0;z-index:90;
+  background:linear-gradient(135deg,var(--mag),var(--mag-deep));
+  border-top:1px solid rgba(255,255,255,.2);
+  box-shadow:0 -14px 40px -12px rgba(0,0,0,.6);
+}
+.sticky-in{display:flex;align-items:center;gap:16px;padding:12px var(--pad);max-width:1180px;margin:0 auto}
+.sticky-ic{width:40px;height:40px;border-radius:11px;background:#fff;display:grid;place-items:center;flex:none}
+.sticky-ic svg{width:22px;height:22px}
+.sticky-t{flex:1;min-width:0}
+.sticky-t b{display:block;font-size:14.5px;font-weight:800;letter-spacing:-.02em}
+.sticky-t small{display:block;color:rgba(255,255,255,.82);font-size:12.5px;font-weight:600;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sticky .btn{flex:none;padding:12px 24px;font-size:14.5px}
+
+/* ---------- reveal ---------- */
+.rv{opacity:0;transform:translateY(20px);transition:opacity .7s cubic-bezier(.2,.7,.3,1),transform .7s cubic-bezier(.2,.7,.3,1)}
+.rv.in{opacity:1;transform:none}
+
+/* ---------- responsive ---------- */
+@media (max-width:980px){
+  .nav-links{display:none}
+  .nav .btn-mag{display:none}
+  .burger{display:block}
+  .hero-in,.dl-in,.real,.bio{grid-template-columns:1fr}
+  .phone-stage{order:-1}
+  .feat,.coach{grid-template-columns:1fr}
+  .qr-card{max-width:340px;margin:0 auto}
+}
+@media (max-width:600px){
+  .row{grid-template-columns:1fr auto}
+  .row .g{display:none}
+  .stat-row{grid-template-columns:1fr}
+  .sticky-t small{display:none}
+  .sticky .btn{padding:12px 18px;font-size:13.5px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .rv{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="mark" href="#top">
+      <svg viewBox="0 0 40 40" aria-hidden="true">
+        <circle cx="20" cy="20" r="18" fill="none" stroke="#fff" stroke-width="2.2"/>
+        <path d="M9 8.5C15 14 15 26 9 31.5" fill="none" stroke="#CE55B6" stroke-width="2.6" stroke-linecap="round" stroke-dasharray="1.6 5"/>
+        <path d="M31 8.5C25 14 25 26 31 31.5" fill="none" stroke="#CE55B6" stroke-width="2.6" stroke-linecap="round" stroke-dasharray="1.6 5"/>
+      </svg>
+      <span>Transc<em>e</em>nd</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#app">The app</a>
+      <a href="#inside">What's inside</a>
+      <a href="#coaching">Coaching</a>
+      <a href="#book">Book</a>
+      <a href="#jiana">Jiana</a>
+    </nav>
+    <a class="btn btn-mag" href="#app">Download the app</a>
+    <button class="burger" id="burger" aria-expanded="false" aria-controls="mob">Menu</button>
+  </div>
+  <div class="mob" id="mob">
+    <a href="#app">The app</a><a href="#inside">What's inside</a>
+    <a href="#coaching">Coaching</a><a href="#book">Book a lesson</a>
+    <a href="#jiana">Meet Jiana</a>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="top">
+  <div class="glow glow-a"></div><div class="glow glow-b"></div>
+  <div class="wrap hero-in">
+    <div class="rv">
+      <p class="kicker">Transcend Fastpitch · Members app</p>
+      <h1>Her whole program, <em>in her pocket.</em></h1>
+      <p class="lede">Every drill I run with my pitchers — written out week by week, day by day,
+        with reps, sets and video. She stops guessing what to do between lessons, and you stop
+        being the one who has to remember.</p>
+      <div class="hero-cta">
+        <a class="btn btn-mag btn-lg" href="#app">Download the app</a>
+        <a class="btn btn-line btn-lg" href="#inside">See what's inside</a>
+      </div>
+      <p class="freebie"><i></i>Free to start · Works on iPhone and Android · No app store needed</p>
+    </div>
+
+    <div class="phone-stage rv">
+      <div>
+        <div class="phone">
+          <div class="screen">
+            <div class="notch" aria-hidden="true"></div>
+            <div class="st"><span>4:13</span><span>▮▮▮ ⌁ 68</span></div>
+            <div class="appbar" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M6 3h12v18l-6-4-6 4z"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg>
+            </div>
+            <div class="app-hero">
+              <img src="https://static.wixstatic.com/media/b1fd75_591f9aa94a004fd0b01e8c3f29eb96b3~mv2.jpg/v1/fill/w_760,h_420,al_c,q_85,enc_auto/p.jpg" alt="">
+              <h4>My Workout Program</h4>
+            </div>
+            <div class="wtabs" id="wtabs">
+              <button class="wtab" data-w="1">Week 1</button>
+              <button class="wtab" data-w="2">Week 2</button>
+              <button class="wtab on" data-w="3">Week 3</button>
+              <button class="wtab" data-w="4">Week 4</button>
+            </div>
+            <div class="dpills" id="dpills">
+              <button class="dpill on" data-d="0">Day 1</button>
+              <button class="dpill" data-d="1">Day 2</button>
+              <button class="dpill" data-d="2">Day 3</button>
+            </div>
+            <div class="exhead"><span id="exCount">4 Exercises</span><span>💡</span></div>
+            <div class="exlist" id="exList"></div>
+            <div class="navbar" aria-hidden="true">
+              <span></span><span></span><div class="plus">+</div><span></span><span></span>
+            </div>
+          </div>
+        </div>
+        <p class="phone-note">Tap the weeks and days — this is the real thing.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DOWNLOAD BAND ===== -->
+<section class="dl" id="app">
+  <div class="wrap dl-in">
+    <div class="rv">
+      <p class="kicker" style="color:rgba(255,255,255,.8)">Get the app</p>
+      <h2>Install it in about fifteen seconds.</h2>
+      <p>Transcend runs right in the browser and installs to her home screen like any other app —
+        no App Store, no updates to chase. Scan the code, or open it on her phone and follow the steps.</p>
+      <div class="dl-btns">
+        <a class="btn btn-white btn-lg" href="https://members.transcendfastpitch.com" target="_blank" rel="noopener">Open the app</a>
+        <a class="btn btn-line btn-lg" href="#inside">What's inside</a>
+      </div>
+
+      <div class="steps">
+        <div class="step-tabs">
+          <button class="step-tab on" data-s="ios">iPhone</button>
+          <button class="step-tab" data-s="android">Android</button>
+        </div>
+        <div class="step-body">
+          <ol id="stepList">
+            <li>Open <b>members.transcendfastpitch.com</b> in Safari</li>
+            <li>Tap the Share button at the bottom</li>
+            <li>Choose <b>Add to Home Screen</b>, then Add</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="rv">
+      <div class="qr-card">
+        <svg viewBox="0 0 29 29" shape-rendering="crispEdges" role="img" aria-label="QR code to members.transcendfastpitch.com">
+          <rect width="29" height="29" fill="#fff"/>
+          <path fill="#20101C" d="M0,0h7v1h-7zM10,0h1v1h-1zM12,0h2v1h-2zM16,0h1v1h-1zM18,0h3v1h-3zM22,0h7v1h-7zM0,1h1v1h-1zM6,1h1v1h-1zM10,1h1v1h-1zM12,1h5v1h-5zM20,1h1v1h-1zM22,1h1v1h-1zM28,1h1v1h-1zM0,2h1v1h-1zM2,2h3v1h-3zM6,2h1v1h-1zM8,2h2v1h-2zM14,2h1v1h-1zM19,2h1v1h-1zM22,2h1v1h-1zM24,2h3v1h-3zM28,2h1v1h-1zM0,3h1v1h-1zM2,3h3v1h-3zM6,3h1v1h-1zM8,3h1v1h-1zM10,3h2v1h-2zM13,3h3v1h-3zM17,3h1v1h-1zM22,3h1v1h-1zM24,3h3v1h-3zM28,3h1v1h-1zM0,4h1v1h-1zM2,4h3v1h-3zM6,4h1v1h-1zM8,4h2v1h-2zM12,4h2v1h-2zM16,4h5v1h-5zM22,4h1v1h-1zM24,4h3v1h-3zM28,4h1v1h-1zM0,5h1v1h-1zM6,5h1v1h-1zM8,5h4v1h-4zM14,5h2v1h-2zM17,5h1v1h-1zM20,5h1v1h-1zM22,5h1v1h-1zM28,5h1v1h-1zM0,6h7v1h-7zM8,6h1v1h-1zM10,6h1v1h-1zM12,6h1v1h-1zM14,6h1v1h-1zM16,6h1v1h-1zM18,6h1v1h-1zM20,6h1v1h-1zM22,6h7v1h-7zM8,7h4v1h-4zM14,7h1v1h-1zM16,7h1v1h-1zM18,7h2v1h-2zM0,8h1v1h-1zM2,8h5v1h-5zM10,8h3v1h-3zM17,8h1v1h-1zM20,8h1v1h-1zM22,8h5v1h-5zM0,9h1v1h-1zM3,9h2v1h-2zM7,9h5v1h-5zM13,9h1v1h-1zM18,9h7v1h-7zM28,9h1v1h-1zM0,10h4v1h-4zM6,10h1v1h-1zM11,10h1v1h-1zM13,10h3v1h-3zM0,11h2v1h-2zM3,11h1v1h-1zM5,11h1v1h-1zM7,11h1v1h-1zM10,11h4v1h-4zM15,11h1v1h-1zM18,11h3v1h-3zM24,11h2v1h-2zM27,11h1v1h-1zM2,12h5v1h-5zM12,12h1v1h-1zM14,12h1v1h-1zM17,12h1v1h-1zM19,12h1v1h-1zM25,12h2v1h-2zM0,13h1v1h-1zM2,13h3v1h-3zM7,13h3v1h-3zM11,13h2v1h-2zM16,13h1v1h-1zM18,13h3v1h-3zM22,13h3v1h-3zM28,13h1v1h-1zM0,14h1v1h-1zM3,14h1v1h-1zM6,14h2v1h-2zM11,14h1v1h-1zM15,14h3v1h-3zM20,14h2v1h-2zM23,14h4v1h-4zM0,15h1v1h-1zM5,15h1v1h-1zM8,15h5v1h-5zM14,15h1v1h-1zM18,15h1v1h-1zM21,15h3v1h-3zM27,15h1v1h-1zM1,16h3v1h-3zM6,16h1v1h-1zM10,16h1v1h-1zM15,16h1v1h-1zM17,16h1v1h-1zM25,16h2v1h-2zM0,17h1v1h-1zM2,17h1v1h-1zM4,17h2v1h-2zM7,17h3v1h-3zM13,17h2v1h-2zM16,17h1v1h-1zM18,17h3v1h-3zM22,17h3v1h-3zM26,17h1v1h-1zM28,17h1v1h-1zM0,18h1v1h-1zM2,18h2v1h-2zM6,18h1v1h-1zM8,18h1v1h-1zM10,18h2v1h-2zM13,18h3v1h-3zM18,18h1v1h-1zM21,18h1v1h-1zM23,18h2v1h-2zM26,18h1v1h-1zM0,19h1v1h-1zM3,19h3v1h-3zM11,19h3v1h-3zM15,19h2v1h-2zM19,19h1v1h-1zM22,19h3v1h-3zM27,19h1v1h-1zM0,20h1v1h-1zM2,20h5v1h-5zM8,20h1v1h-1zM14,20h4v1h-4zM20,20h5v1h-5zM26,20h3v1h-3zM8,21h2v1h-2zM12,21h1v1h-1zM16,21h1v1h-1zM19,21h2v1h-2zM24,21h5v1h-5zM0,22h7v1h-7zM10,22h3v1h-3zM15,22h6v1h-6zM22,22h1v1h-1zM24,22h3v1h-3zM0,23h1v1h-1zM6,23h1v1h-1zM8,23h1v1h-1zM11,23h1v1h-1zM14,23h2v1h-2zM19,23h2v1h-2zM24,23h1v1h-1zM27,23h2v1h-2zM0,24h1v1h-1zM2,24h3v1h-3zM6,24h1v1h-1zM8,24h1v1h-1zM10,24h1v1h-1zM17,24h1v1h-1zM20,24h5v1h-5zM26,24h1v1h-1zM0,25h1v1h-1zM2,25h3v1h-3zM6,25h1v1h-1zM8,25h2v1h-2zM12,25h3v1h-3zM16,25h1v1h-1zM21,25h1v1h-1zM25,25h4v1h-4zM0,26h1v1h-1zM2,26h3v1h-3zM6,26h1v1h-1zM8,26h1v1h-1zM10,26h1v1h-1zM13,26h3v1h-3zM19,26h1v1h-1zM21,26h7v1h-7zM0,27h1v1h-1zM6,27h1v1h-1zM9,27h4v1h-4zM14,27h2v1h-2zM18,27h3v1h-3zM22,27h4v1h-4zM27,27h1v1h-1zM0,28h7v1h-7zM8,28h2v1h-2zM12,28h1v1h-1zM15,28h3v1h-3zM19,28h1v1h-1zM21,28h3v1h-3zM26,28h1v1h-1z"/>
+        </svg>
+        <b>Point her camera here</b>
+        <small>members.transcendfastpitch.com</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WHAT'S INSIDE ===== -->
+<section class="sec" id="inside">
+  <div class="wrap">
+    <div class="rv" style="max-width:60ch">
+      <p class="kicker">What's inside</p>
+      <h2 style="font-size:clamp(2rem,4.6vw,3.3rem)">The stuff that actually moves the needle between lessons.</h2>
+      <p class="lede" style="margin-top:20px">One lesson a week is an hour. The other 167 hours are where
+        pitchers are made. The app is how I stay with her for those.</p>
+    </div>
+
+    <div class="feat rv">
+      <div class="fcard">
+        <div class="fico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg></div>
+        <h3>Weeks, days, done</h3>
+        <p>Programs are laid out week by week and day by day, so there's never a night where nobody
+          knows what she's supposed to be working on.</p>
+      </div>
+      <div class="fcard">
+        <div class="fico"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M10 9l5 3-5 3z"/></svg></div>
+        <h3>Video on every drill</h3>
+        <p>Each exercise comes with the demo, so she's copying the movement instead of trying to
+          remember what it looked like on Tuesday.</p>
+      </div>
+      <div class="fcard">
+        <div class="fico"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div>
+        <h3>Reps and sets tracked</h3>
+        <p>She checks off what she finished. You get to stop asking. I get to see who's actually
+          putting the work in before the next lesson.</p>
+      </div>
+      <div class="fcard">
+        <div class="fico"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <h3>Notes from me</h3>
+        <p>Cues attached to the drills she specifically struggles with — stacking, whip, arm path —
+          in the same words I use in the circle.</p>
+      </div>
+      <div class="fcard">
+        <div class="fico"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/></svg></div>
+        <h3>Built for a real week</h3>
+        <p>Programs assume school, practice and tournaments. Short days when the week is packed,
+          longer ones when there's room.</p>
+      </div>
+      <div class="fcard">
+        <div class="fico"><svg viewBox="0 0 24 24"><path d="M12 3v13"/><path d="M7 11l5 5 5-5"/><path d="M4 21h16"/></svg></div>
+        <h3>No app store, no cost to start</h3>
+        <p>It installs straight from the browser to her home screen. Start free, upgrade when the
+          Academy library opens.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== REAL SCREENS ===== -->
+<section class="sec" style="padding-top:0">
+  <div class="wrap real">
+    <div class="rv">
+      <div class="shot">
+        <img src="app-screen.jpg" alt="A real screen from the Transcend Fastpitch members app showing Week 3, Day 1 exercises">
+      </div>
+    </div>
+    <div class="rv">
+      <p class="kicker">Not a mockup</p>
+      <h2>This is already live. Most people just don't know it exists.</h2>
+      <p class="lede" style="margin-top:20px">The members app is running today at
+        members.transcendfastpitch.com — real programs, real athletes, real drills. It's the most
+        valuable thing Transcend has built, and right now it's buried behind a login link.
+        This page exists to put it out front.</p>
+      <div class="stat-row">
+        <div class="stat"><b>50+</b><small>Drills in the library</small></div>
+        <div class="stat"><b>8U–College</b><small>Every level programmed</small></div>
+        <div class="stat"><b>7 days</b><small>Free to try it out</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== COACHING ===== -->
+<section class="sec" id="coaching">
+  <div class="wrap">
+    <div class="rv" style="max-width:58ch">
+      <p class="kicker">In person</p>
+      <h2 style="font-size:clamp(2rem,4.6vw,3.3rem)">The app doesn't replace me. It carries me home.</h2>
+      <p class="lede" style="margin-top:20px">Everything still starts with real coaching. Here's how
+        athletes get in.</p>
+    </div>
+    <div class="coach rv">
+      <div class="ccard">
+        <div class="ctop">
+          <img src="https://static.wixstatic.com/media/b1fd75_7d833727bbcf4ca9ad0049eed3c8f063~mv2.jpg/v1/fill/w_760,h_420,al_c,q_85,enc_auto/c1.jpg" alt="">
+          <span class="tag">Group</span>
+        </div>
+        <div class="cbody">
+          <h3>Clinics &amp; workshops</h3>
+          <p>Small-group instruction where athletes find out where they actually are. Beginners build
+            a foundation; advanced players leave with new tools.</p>
+          <a href="#book">See clinic dates →</a>
+        </div>
+      </div>
+      <div class="ccard">
+        <div class="ctop">
+          <img src="https://static.wixstatic.com/media/b1fd75_2cca252f1c394b97bd1676637f6ae3d2~mv2.jpg/v1/crop/x_924,y_269,w_2230,h_1939/fill/w_760,h_420,al_c,q_85,enc_auto/c2.jpg" alt="">
+          <span class="tag">Private</span>
+        </div>
+        <div class="cbody">
+          <h3>1:1 lessons</h3>
+          <p>Limited spots. The goal is to send her home able to practice alone — correct mechanics,
+            real spin, and habits that hold up in a game.</p>
+          <a href="#book">Book a time →</a>
+        </div>
+      </div>
+      <div class="ccard">
+        <div class="ctop">
+          <img src="https://static.wixstatic.com/media/b1fd75_1fce26c019964e6d9adbee9fb85c5f84~mv2.jpg/v1/fill/w_760,h_420,al_c,q_85,enc_auto/c3.jpg" alt="">
+          <span class="tag">Remote</span>
+        </div>
+        <div class="cbody">
+          <h3>Video analysis &amp; custom program</h3>
+          <p>Send film, get a breakdown, and I'll write the program — then it lands straight in her
+            app with drills, reps and a schedule.</p>
+          <a href="#book">Start with video →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BOOKING ===== -->
+<section class="sec" id="book" style="padding-top:0">
+  <div class="wrap">
+    <div class="rv">
+      <p class="kicker">Schedule</p>
+      <h2 style="font-size:clamp(1.9rem,4.2vw,3rem)">Work with Jiana.</h2>
+    </div>
+    <div class="rows rv">
+      <a class="row" href="#"><div><strong>1 hour pitching lesson</strong><small>Full mechanics, spin and sequencing session</small></div><div class="d">60 min</div><div class="g">Book →</div></a>
+      <a class="row" href="#"><div><strong>45 minute pitching lesson</strong><small>Focused work on one or two things</small></div><div class="d">45 min</div><div class="g">Book →</div></a>
+      <a class="row" href="#"><div><strong>90 minute intensive</strong><small>Mechanics rebuild or adding a new pitch</small></div><div class="d">90 min</div><div class="g">Book →</div></a>
+      <a class="row" href="#"><div><strong>Virtual lesson</strong><small>Over Zoom — mechanics and spin, from anywhere</small></div><div class="d">60 min</div><div class="g">Book →</div></a>
+      <a class="row" href="#"><div><strong>1 hour batting lesson</strong><small>Swing work plus drills to take home</small></div><div class="d">60 min</div><div class="g">Book →</div></a>
+      <a class="row" href="#"><div><strong>30 minute batting lesson</strong><small>Short tune-up between games</small></div><div class="d">30 min</div><div class="g">Book →</div></a>
+      <a class="row" href="#"><div><strong>Fall pitching mini class — 10U</strong><small>Building the basic mechanics of pitching</small></div><div class="d">60 min</div><div class="g">Join →</div></a>
+      <a class="row" href="#"><div><strong>Fall pitching mini class — 12U</strong><small>Building the basic mechanics of pitching</small></div><div class="d">60 min</div><div class="g">Join →</div></a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== JIANA ===== -->
+<section class="sec" id="jiana" style="padding-top:0">
+  <div class="wrap bio">
+    <div class="bio-img rv">
+      <img src="https://static.wixstatic.com/media/b1fd75_83fb3df96fa14919b5195dcc66967b80~mv2.png/v1/crop/x_968,y_0,w_4975,h_3456/fill/w_1100,h_880,al_c,q_88,enc_auto/j.png" alt="Jiana Bowie">
+    </div>
+    <div class="rv">
+      <p class="kicker">Meet Jiana</p>
+      <h2>I was the pitcher who didn't believe herself.</h2>
+      <p>Early on, my problem was never the mechanics or the hours. It was the doubt in the circle —
+        the part nobody was coaching.</p>
+      <p>I played D1 at Saint Mary's, finished at Menlo College, and have spent the years since
+        studying how the body is actually built to move. I teach internal rotation, and I haven't
+        looked back.</p>
+      <p>But the mechanics are the easy half. The power of having someone in your corner is
+        immeasurable — and I want my athletes to know their worth goes well past the sport they play.</p>
+      <a class="btn btn-line" href="#book" style="margin-top:8px">Work with me</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FINAL CTA ===== -->
+<section class="final">
+  <div class="glow glow-a" style="top:-40%;right:-10%;opacity:.55"></div>
+  <div class="wrap rv" style="position:relative;z-index:1">
+    <h2>Put the program <em>in her hands</em> tonight.</h2>
+    <p class="lede" style="text-align:center">Free to start. Installs in about fifteen seconds.
+      She'll have something to do at the wall before dinner.</p>
+    <div class="hero-cta">
+      <a class="btn btn-mag btn-lg" href="https://members.transcendfastpitch.com" target="_blank" rel="noopener">Download the app</a>
+      <a class="btn btn-line btn-lg" href="#book">Book a lesson first</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-in">
+      <div><a href="#app">The app</a> · <a href="#book">Book</a> · <a href="#coaching">Coaching</a> ·
+        <a href="https://www.instagram.com/transcend_fastpitch/" target="_blank" rel="noopener">Instagram</a> ·
+        <a href="mailto:jianabowie1@gmail.com">jianabowie1@gmail.com</a></div>
+      <div>© 2026 Transcend Fastpitch</div>
+    </div>
+    <p class="note">Concept redesign mockup — layout, copy and interactions are proposals, not a live site.
+      Drill names inside the phone are placeholders except for the two taken from the real app.</p>
+  </div>
+</footer>
+
+<!-- ===== STICKY INSTALL BAR ===== -->
+<div class="sticky">
+  <div class="sticky-in">
+    <div class="sticky-ic" aria-hidden="true">
+      <svg viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="17" fill="none" stroke="#A63A92" stroke-width="2.4"/>
+        <path d="M10 9.5C15.5 14.5 15.5 25.5 10 30.5" fill="none" stroke="#A63A92" stroke-width="2.6" stroke-linecap="round" stroke-dasharray="1.6 5"/>
+        <path d="M30 9.5C24.5 14.5 24.5 25.5 30 30.5" fill="none" stroke="#A63A92" stroke-width="2.6" stroke-linecap="round" stroke-dasharray="1.6 5"/>
+      </svg>
+    </div>
+    <div class="sticky-t">
+      <b>Transcend — My Workout Program</b>
+      <small>Free to start · Installs to her home screen in seconds</small>
+    </div>
+    <a class="btn btn-white" href="#app">Download</a>
+  </div>
+</div>
+
+<script>
+/* mobile menu */
+var burger=document.getElementById('burger'),mob=document.getElementById('mob');
+burger.addEventListener('click',function(){
+  var o=mob.classList.toggle('open');
+  burger.setAttribute('aria-expanded',o); burger.textContent=o?'Close':'Menu';
+});
+mob.addEventListener('click',function(e){if(e.target.tagName==='A'){mob.classList.remove('open');burger.textContent='Menu';}});
+
+/* ---- live app replica ---- */
+var DAYS=[
+ [["Arm Slot Snaps","stacking, whip, arm path","Reps 15"],
+  ["Butterfly W's","hip engagement, stacking, front side","Reps 15–20"],
+  ["Wall Whips","arm path, loose forearm","Reps 20"],
+  ["Hip Snap Holds","hip engagement, power","3 × 20 sec"]],
+ [["K-Position Holds","stacking, balance, posture","Reps 10"],
+  ["Rocker Drill","drive, timing, load","Reps 15"],
+  ["Spin Ladder","spin efficiency, all pitches","Reps 25"],
+  ["Med Ball Rotationals","power, lower half","Reps 12"]],
+ [["Long Toss Progression","arm health, speed","10 min"],
+  ["Drop Spin Reps","movement, topspin","Reps 20"],
+  ["Change-Up Isolations","feel, off-speed","Reps 15"],
+  ["Band Recovery Series","arm care","2 × 15"]]
+];
+var exList=document.getElementById('exList'),exCount=document.getElementById('exCount');
+function renderDay(i){
+  var d=DAYS[i];
+  exCount.textContent=d.length+' Exercises';
+  exList.innerHTML=d.map(function(e){
+    return '<div class="ex"><b>'+e[0]+'</b><small>'+e[1]+'</small>'+
+           '<div><span class="chip">Normal Set</span></div>'+
+           '<div class="reps">'+e[2]+'</div></div>';
+  }).join('');
+}
+renderDay(0);
+document.getElementById('dpills').addEventListener('click',function(e){
+  var b=e.target.closest('.dpill'); if(!b)return;
+  [].forEach.call(this.children,function(c){c.classList.toggle('on',c===b);});
+  renderDay(+b.dataset.d);
+});
+document.getElementById('wtabs').addEventListener('click',function(e){
+  var b=e.target.closest('.wtab'); if(!b)return;
+  [].forEach.call(this.children,function(c){c.classList.toggle('on',c===b);});
+  renderDay(0);
+  var pills=document.getElementById('dpills').children;
+  [].forEach.call(pills,function(c,i){c.classList.toggle('on',i===0);});
+});
+
+/* ---- install steps ---- */
+var STEPS={
+  ios:['Open <b>members.transcendfastpitch.com</b> in Safari','Tap the Share button at the bottom','Choose <b>Add to Home Screen</b>, then Add'],
+  android:['Open <b>members.transcendfastpitch.com</b> in Chrome','Tap the ⋮ menu in the top corner','Choose <b>Install app</b> or Add to Home screen']
+};
+var stepList=document.getElementById('stepList');
+[].forEach.call(document.querySelectorAll('.step-tab'),function(t){
+  t.addEventListener('click',function(){
+    [].forEach.call(document.querySelectorAll('.step-tab'),function(x){x.classList.toggle('on',x===t);});
+    stepList.innerHTML=STEPS[t.dataset.s].map(function(s){return '<li>'+s+'</li>';}).join('');
+  });
+});
+
+/* ---- reveal ---- */
+var io=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+},{threshold:.1,rootMargin:'0px 0px -30px'});
+[].forEach.call(document.querySelectorAll('.rv'),function(el){io.observe(el);});
+</script>
+</body>
+</html>
