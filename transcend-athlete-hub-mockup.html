@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Transcend Athlete Hub — concept preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#100810;--panel:#1B1016;--card:#241522;--raise:#301C2C;
+  --mag:#A63A92;--mag-lt:#CE55B6;--deep:#6E1F5F;
+  --white:#fff;--soft:#D9C9D5;--mute:#B29CAC;
+  --edge:rgba(255,255,255,.09);--edge2:rgba(255,255,255,.18);
+  --f:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:#0A050A;color:var(--white);font-family:var(--f);-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:2.5px solid var(--mag-lt);outline-offset:2px}
+h1,h2,h3,p{margin:0}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* preview switcher */
+.switch{position:sticky;top:0;z-index:20;background:rgba(10,5,10,.92);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--edge);padding:calc(10px + env(safe-area-inset-top,0px)) 14px 10px}
+.switch-in{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:space-between}
+.switch-title{font-size:13px;font-weight:700;color:var(--mute)}
+.switch-title b{color:var(--white)}
+.tabs{display:flex;gap:4px;background:var(--panel);border:1px solid var(--edge);border-radius:999px;padding:4px}
+.tab{min-height:38px;border:0;border-radius:999px;background:transparent;color:var(--soft);font-weight:700;font-size:13px;padding:0 14px}
+.tab[aria-selected="true"]{background:var(--mag);color:#fff}
+
+.screen{display:none;padding:22px 14px 60px}
+.screen.on{display:block}
+
+/* phone frame (desktop) / full width (phone) */
+.phone{max-width:400px;margin:0 auto;background:var(--void);border:1px solid var(--edge);border-radius:32px;overflow:hidden}
+@media (max-width:480px){
+  .screen{padding:0 0 40px}
+  .phone{border:0;border-radius:0;max-width:none}
+}
+.ph-body{padding:20px;display:flex;flex-direction:column;gap:16px}
+
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:15px;letter-spacing:.06em}
+.brand svg{width:24px;height:24px}
+.avatar{width:44px;height:44px;border-radius:50%;border:1px solid var(--edge2);background:var(--card);color:#fff;font-weight:700;font-size:14px}
+.date{font-size:14px;color:var(--mute);font-weight:600}
+.hello{font-size:26px;font-weight:800;letter-spacing:-.02em;margin-top:2px}
+
+.today{background:var(--card);border:1px solid rgba(206,85,182,.45);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.kick{font-size:11px;font-weight:800;letter-spacing:.14em;color:var(--mag-lt)}
+.today h2{font-size:21px;font-weight:800;letter-spacing:-.02em}
+.quote{font-size:14px;line-height:1.5;color:var(--soft);margin-top:6px}
+.bar{height:6px;border-radius:6px;background:rgba(255,255,255,.1);overflow:hidden}
+.bar span{display:block;height:100%;background:var(--mag-lt);border-radius:6px;transition:width .3s ease}
+.task{min-height:50px;display:flex;align-items:center;gap:12px;width:100%;background:var(--panel);
+  border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px 12px;color:#fff;text-align:left}
+.box{width:24px;height:24px;border-radius:7px;border:2px solid var(--mute);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.box svg{width:14px;height:14px;opacity:0}
+.task.done .box{background:var(--mag);border-color:var(--mag)}
+.task.done .box svg{opacity:1}
+.task .nm{font-size:14px;font-weight:700;display:block}
+.task.done .nm{color:var(--mute);text-decoration:line-through}
+.task .mt{font-size:12px;color:var(--mute);font-weight:600}
+.tasks{display:flex;flex-direction:column;gap:8px}
+.primary{min-height:48px;border:0;border-radius:999px;background:var(--mag);color:#fff;font-weight:800;font-size:15px}
+.primary:hover{background:var(--mag-lt)}
+
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.stat{background:var(--panel);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px}
+.stat b{display:block;font-size:20px;font-weight:800;letter-spacing:-.03em}
+.stat span{font-size:11px;color:var(--mute);font-weight:600}
+
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.card{min-height:92px;display:flex;flex-direction:column;justify-content:space-between;gap:10px;background:var(--card);
+  border:1px solid var(--edge);border-radius:16px;padding:14px;color:#fff;text-align:left;text-decoration:none}
+.card:hover{border-color:rgba(206,85,182,.45)}
+.card svg{width:22px;height:22px}
+.card .t{font-weight:800;font-size:14px;display:block}
+.card .s{font-size:12px;color:var(--mute);font-weight:600}
+.card.elite{grid-column:span 2;flex-direction:row;align-items:center;justify-content:flex-start;gap:14px;background:var(--raise);border-color:rgba(206,85,182,.55);min-height:76px}
+.ic{width:40px;height:40px;border-radius:11px;background:var(--mag);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ic svg{width:20px;height:20px}
+.pill{font-size:10px;font-weight:800;letter-spacing:.1em;background:var(--mag-lt);color:var(--void);padding:3px 7px;border-radius:5px}
+.new{font-size:11px;font-weight:800;background:var(--mag);color:#fff;padding:3px 8px;border-radius:999px}
+
+.nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));background:var(--panel);border-top:1px solid rgba(255,255,255,.08);padding:6px 8px 14px}
+.nav button{min-height:52px;background:none;border:0;color:var(--mute);font-size:11px;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+.nav button.on{color:var(--mag-lt);font-weight:800}
+.nav svg{width:20px;height:20px}
+
+/* progress */
+.back{min-height:44px;display:flex;align-items:center;gap:6px;background:none;border:0;color:var(--soft);font-size:14px;font-weight:700;padding:0}
+.back svg{width:18px;height:18px}
+.seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;background:var(--panel);border:1px solid rgba(255,255,255,.08);border-radius:999px;padding:4px}
+.seg button{min-height:40px;border:0;border-radius:999px;background:transparent;color:var(--soft);font-weight:700;font-size:13px}
+.seg button[aria-pressed="true"]{background:var(--mag);color:#fff;font-weight:800}
+.panel{background:var(--card);border:1px solid var(--edge);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.big{font-size:28px;font-weight:800;letter-spacing:-.03em}
+.big small{font-size:14px;color:var(--mute);font-weight:700}
+.chip{font-size:13px;font-weight:800;color:var(--void);background:var(--mag-lt);padding:4px 10px;border-radius:999px;white-space:nowrap}
+.panel svg.chart{width:100%;height:auto;display:block}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.cal i{height:34px;border-radius:7px;background:var(--raise);border:1px solid rgba(255,255,255,.14)}
+.cal i.p{background:var(--mag-lt);border-color:var(--mag-lt)}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--mute);font-weight:600}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.ms{display:flex;align-items:center;gap:12px}
+.ms .dot{width:32px;height:32px;border-radius:50%;background:var(--mag);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ms .dot svg{width:16px;height:16px}
+.ms .dot.next{background:none;border:2px dashed var(--mute)}
+.ms b{display:block;font-size:14px;font-weight:700}
+.ms span{font-size:12px;color:var(--mute);font-weight:600}
+.note{background:var(--raise);border:1px solid rgba(206,85,182,.45);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.note p{font-size:14px;line-height:1.55}
+
+/* coach */
+.coach{max-width:1200px;margin:0 auto;background:var(--void);border:1px solid var(--edge);border-radius:20px;overflow:hidden}
+@media (max-width:480px){.coach{border:0;border-radius:0}}
+.c-top{background:var(--panel);border-bottom:1px solid var(--edge);padding:14px 22px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.c-nav{display:flex;flex-wrap:wrap;gap:4px}
+.c-nav span{min-height:38px;display:flex;align-items:center;padding:0 14px;border-radius:999px;color:var(--soft);font-size:14px;font-weight:700}
+.c-nav span.on{background:var(--raise);color:#fff;font-weight:800}
+.c-main{padding:24px 22px 30px;display:flex;flex-direction:column;gap:22px}
+.c-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px}
+.c-head h1{font-size:30px;font-weight:800;letter-spacing:-.02em;margin:6px 0}
+.c-sub{font-size:14px;color:var(--mute);font-weight:600}
+.status{font-size:13px;font-weight:800;padding:8px 14px;border-radius:999px;background:var(--mag-lt);color:var(--void)}
+.status.ok{background:#fff}
+.c-cols{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start}
+.c-left{flex:1 1 260px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.c-mid{flex:999 1 480px;min-width:0;display:flex;flex-direction:column;gap:12px}
+.c-right{flex:1 1 250px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.box2{background:var(--card);border:1px solid var(--edge);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:10px}
+.box2.quiet{background:var(--panel)}
+.box2 h2{font-size:12px;font-weight:800;letter-spacing:.12em;color:var(--mag-lt)}
+.box2 p,.box2 li{font-size:14px;line-height:1.55}
+.box2 ul{margin:0;padding-left:18px;color:var(--soft)}
+.nums{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.nums b{display:block;font-size:20px;font-weight:800}
+.nums span{font-size:11px;color:var(--mute);font-weight:600}
+.wk{background:var(--card);border:1px solid var(--edge);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.wk h3{font-size:18px;font-weight:800;margin-top:3px}
+.ghost{min-height:40px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:transparent;color:var(--soft);font-size:13px;font-weight:700}
+.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:640px){.trio{grid-template-columns:1fr}}
+.trio div{background:var(--panel);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:4px}
+.trio b{font-size:11px;font-weight:800;letter-spacing:.1em}
+.trio span{font-size:13px;line-height:1.5;color:var(--soft)}
+.review{background:var(--raise);border:1px solid rgba(206,85,182,.5);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.review h2{font-size:12px;font-weight:800;letter-spacing:.12em;color:var(--mag-lt)}
+.review label{display:flex;align-items:flex-start;gap:10px;font-size:14px;line-height:1.45;cursor:pointer}
+.review input{width:20px;height:20px;margin:1px 0 0;accent-color:var(--mag);flex-shrink:0}
+.approve{min-height:48px;border-radius:999px;border:0;background:var(--mag);color:#fff;font-weight:800;font-size:15px}
+.approve.ok{background:#fff;color:var(--void)}
+.outline{min-height:46px;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:transparent;color:#fff;font-weight:700;font-size:14px}
+.small{font-size:12px;line-height:1.5;color:var(--soft)}
+
+.foot{text-align:center;font-size:12px;color:var(--mute);margin-top:18px;padding:0 16px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="switch">
+  <div class="switch-in">
+    <div class="switch-title"><b>Transcend Athlete Hub</b> · concept preview, sample data</div>
+    <div class="tabs" role="tablist" aria-label="Preview screens">
+      <button class="tab" role="tab" data-go="home" aria-selected="true">Athlete home</button>
+      <button class="tab" role="tab" data-go="progress" aria-selected="false">Progress</button>
+      <button class="tab" role="tab" data-go="coach" aria-selected="false">Coach review</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== ATHLETE HOME ===================== -->
+<section class="screen on" id="home" aria-label="Athlete home">
+  <div class="phone">
+    <div class="ph-body">
+      <div class="row">
+        <div class="brand">
+          <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M9 8.5C15 14 15 26 9 31.5" fill="none" stroke="#CE55B6" stroke-width="2.6" stroke-linecap="round" stroke-dasharray="1.6 5"/><path d="M31 8.5C25 14 25 26 31 31.5" fill="none" stroke="#CE55B6" stroke-width="2.6" stroke-linecap="round" stroke-dasharray="1.6 5"/></svg>
+          TRANSCEND
+        </div>
+        <button class="avatar" aria-label="Account">KR</button>
+      </div>
+
+      <div>
+        <div class="date">Tuesday, Oct 13</div>
+        <h1 class="hello">Let's go, Kaylee.</h1>
+      </div>
+
+      <div class="today">
+        <div class="row">
+          <span class="kick">Today · Week 3, Day 2</span>
+          <span class="date" style="font-size:12px;font-weight:700" id="doneLabel">1 of 3 done</span>
+        </div>
+        <div>
+          <h2>Arm path &amp; whip</h2>
+          <p class="quote">"Stay loose through release. Film your last 10 and send them to me." — Jiana</p>
+        </div>
+        <div class="bar"><span id="doneBar" style="width:33%"></span></div>
+        <div class="tasks" id="tasks">
+          <button class="task done" aria-pressed="true">
+            <span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span><span class="nm">Arm Slot Snaps</span><span class="mt">3 sets × 15</span></span>
+          </button>
+          <button class="task" aria-pressed="false">
+            <span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span><span class="nm">Wall Whips</span><span class="mt">3 sets × 20</span></span>
+          </button>
+          <button class="task" aria-pressed="false">
+            <span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span><span class="nm">Bullpen — log your results</span><span class="mt">40 pitches · zones</span></span>
+          </button>
+        </div>
+        <button class="primary">Start today's session</button>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><b>54.2</b><span>Top FB, mph</span></div>
+        <div class="stat"><b>63%</b><span>Strikes, last pen</span></div>
+        <div class="stat"><b>4 days</b><span>Practice streak</span></div>
+      </div>
+
+      <div class="cards">
+        <button class="card elite">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v3h6V3M9 12h6M9 16h4"/></svg></span>
+          <span><span style="display:flex;align-items:center;gap:8px"><span class="t" style="font-size:15px">My custom plan</span><span class="pill">ELITE</span></span><span class="s" style="color:var(--soft)">Built for you by Jiana · updated Monday</span></span>
+        </button>
+        <button class="card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#CE55B6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M10 9l5 3-5 3z"/></svg>
+          <span><span class="t">Drill library</span><span class="s">50+ drills</span></span>
+        </button>
+        <button class="card">
+          <span class="row" style="width:100%"><svg viewBox="0 0 24 24" fill="none" stroke="#CE55B6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg><span class="new">1 new</span></span>
+          <span><span class="t">Video review</span><span class="s">Opens OnForm</span></span>
+        </button>
+        <button class="card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#CE55B6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"/></svg>
+          <span><span class="t">Strength</span><span class="s">Day 2 · 25 min</span></span>
+        </button>
+        <button class="card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#CE55B6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.7C9 7 6 10.3 6 14a6 6 0 0 0 12 0c0-3.7-3-7-6-11.3z"/></svg>
+          <span><span class="t">Fueling</span><span class="s">Tournament-day guide</span></span>
+        </button>
+        <button class="card" data-go="progress">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#CE55B6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/></svg>
+          <span><span class="t">My progress</span><span class="s">+1.8 mph since Aug</span></span>
+        </button>
+        <button class="card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#CE55B6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>
+          <span><span class="t">Book a lesson</span><span class="s">Next: Thu 4:30</span></span>
+        </button>
+      </div>
+    </div>
+
+    <nav class="nav" aria-label="App">
+      <button class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Home</button>
+      <button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 10h18"/></svg>Plan</button>
+      <button data-go="progress"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"/></svg>Progress</button>
+      <button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Coach</button>
+    </nav>
+  </div>
+  <p class="foot">Tap the checklist items. Tap "My progress" to see the reports.</p>
+</section>
+
+<!-- ===================== PROGRESS ===================== -->
+<section class="screen" id="progress" aria-label="Progress">
+  <div class="phone">
+    <div class="ph-body">
+      <div class="row">
+        <button class="back" data-go="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>Home</button>
+        <span class="date" style="font-size:12px;font-weight:700">Sample data</span>
+      </div>
+      <div>
+        <h1 class="hello" style="margin:0">Your progress</h1>
+        <div class="date" style="margin-top:4px">Kaylee · RHP · 14U</div>
+      </div>
+
+      <div class="seg" role="group" aria-label="Time range" id="seg">
+        <button aria-pressed="false">4 weeks</button>
+        <button aria-pressed="true">8 weeks</button>
+        <button aria-pressed="false">Season</button>
+      </div>
+
+      <div class="panel">
+        <div class="row" style="align-items:flex-end">
+          <div><div class="kick">Fastball velocity</div><div class="big">54.2 <small>mph</small></div></div>
+          <span class="chip">+1.8 since Aug</span>
+        </div>
+        <svg class="chart" viewBox="0 0 348 170" role="img" aria-label="Line chart: top fastball velocity rose from 52.4 mph in mid-August to 54.2 mph in mid-October. Goal is 55 mph.">
+          <line x1="20" y1="20" x2="334" y2="20" stroke="#CE55B6" stroke-width="1.5" stroke-dasharray="4 5"/>
+          <text x="334" y="13" text-anchor="end" fill="#CE55B6" font-size="11" font-weight="700">Goal 55</text>
+          <line x1="20" y1="60" x2="334" y2="60" stroke="rgba(255,255,255,.08)"/>
+          <line x1="20" y1="100" x2="334" y2="100" stroke="rgba(255,255,255,.08)"/>
+          <line x1="20" y1="140" x2="334" y2="140" stroke="rgba(255,255,255,.16)"/>
+          <text x="0" y="64" fill="#B29CAC" font-size="10">54</text>
+          <text x="0" y="104" fill="#B29CAC" font-size="10">53</text>
+          <text x="0" y="144" fill="#B29CAC" font-size="10">52</text>
+          <polygon points="20,124 59,116 98,120 136,100 175,96 214,84 253,68 291,60 330,52 330,140 20,140" fill="rgba(206,85,182,.14)"/>
+          <polyline points="20,124 59,116 98,120 136,100 175,96 214,84 253,68 291,60 330,52" fill="none" stroke="#CE55B6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="330" cy="52" r="5.5" fill="#fff" stroke="#CE55B6" stroke-width="3"/>
+          <text x="20" y="162" fill="#B29CAC" font-size="10">Aug 18</text>
+          <text x="175" y="162" text-anchor="middle" fill="#B29CAC" font-size="10">Sep 15</text>
+          <text x="330" y="162" text-anchor="end" fill="#B29CAC" font-size="10">Oct 13</text>
+        </svg>
+        <span style="font-size:13px;color:var(--soft);font-weight:600">0.8 mph to your next milestone</span>
+      </div>
+
+      <div class="panel">
+        <div class="row" style="align-items:flex-end">
+          <div><div class="kick">Strike % by bullpen</div><div class="big">63%</div></div>
+          <span class="date" style="font-size:13px;font-weight:700">Last 8 pens</span>
+        </div>
+        <svg class="chart" viewBox="0 0 348 150" role="img" aria-label="Bar chart: strike percentage over the last eight bullpens, climbing from 52 percent to 63 percent. Target line at 65 percent.">
+          <line x1="16" y1="38" x2="340" y2="38" stroke="#CE55B6" stroke-width="1.5" stroke-dasharray="4 5"/>
+          <text x="340" y="31" text-anchor="end" fill="#CE55B6" font-size="11" font-weight="700">Target 65%</text>
+          <line x1="16" y1="130" x2="340" y2="130" stroke="rgba(255,255,255,.16)"/>
+          <rect x="22" y="86" width="26" height="44" rx="5" fill="#6E1F5F"/>
+          <rect x="62" y="75" width="26" height="55" rx="5" fill="#6E1F5F"/>
+          <rect x="102" y="90" width="26" height="40" rx="5" fill="#6E1F5F"/>
+          <rect x="142" y="64" width="26" height="66" rx="5" fill="#6E1F5F"/>
+          <rect x="182" y="57" width="26" height="73" rx="5" fill="#6E1F5F"/>
+          <rect x="222" y="68" width="26" height="62" rx="5" fill="#6E1F5F"/>
+          <rect x="262" y="53" width="26" height="77" rx="5" fill="#6E1F5F"/>
+          <rect x="302" y="46" width="26" height="84" rx="5" fill="#CE55B6"/>
+          <text x="35" y="146" text-anchor="middle" fill="#B29CAC" font-size="10">52</text>
+          <text x="315" y="146" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">63</text>
+        </svg>
+      </div>
+
+      <div class="panel">
+        <div class="row"><span class="kick">Practice consistency</span><span style="font-size:13px;font-weight:700;color:var(--soft)">18 of 28 days</span></div>
+        <div class="cal" id="cal" role="img" aria-label="Practice calendar for the last four weeks: practiced 18 of 28 days."></div>
+        <div class="legend"><span><i style="background:#CE55B6"></i>Practiced</span><span><i style="background:#301C2C;border:1px solid rgba(255,255,255,.14)"></i>Rest</span></div>
+      </div>
+
+      <div class="panel" style="background:var(--panel);gap:12px">
+        <span class="kick">Milestones</span>
+        <div class="ms"><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><div><b>First pitch over 54 mph</b><span>Oct 6</span></div></div>
+        <div class="ms"><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><div><b>3 pens in a row over 60% strikes</b><span>Oct 11</span></div></div>
+        <div class="ms"><span class="dot next"></span><div><b>55 mph fastball</b><span>Next up</span></div></div>
+      </div>
+
+      <div class="note">
+        <span class="kick">From Jiana</span>
+        <p>Your strike % jumped once your stride stopped drifting glove-side. Keep the K-position holds in every warm-up. That's where these gains are coming from.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== COACH REVIEW ===================== -->
+<section class="screen" id="coach" aria-label="Coach custom plan review">
+  <div class="coach">
+    <div class="c-top">
+      <div class="brand">
+        <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M9 8.5C15 14 15 26 9 31.5" fill="none" stroke="#CE55B6" stroke-width="2.6" stroke-linecap="round" stroke-dasharray="1.6 5"/><path d="M31 8.5C25 14 25 26 31 31.5" fill="none" stroke="#CE55B6" stroke-width="2.6" stroke-linecap="round" stroke-dasharray="1.6 5"/></svg>
+        TRANSCEND <span style="font-size:13px;font-weight:700;color:var(--mute);letter-spacing:0">Coach</span>
+      </div>
+      <div class="c-nav"><span>Athletes</span><span class="on">Custom plans</span><span>Programs</span><span>Reports</span></div>
+    </div>
+
+    <div class="c-main">
+      <div class="c-head">
+        <div>
+          <span class="kick">Elite custom plan · Nov 2 – Nov 29</span>
+          <h1>Maya R. — 4-week showcase block</h1>
+          <span class="c-sub">RHP · 18U · Class of 2027 · Sample data</span>
+        </div>
+        <span class="status" id="status">Draft · needs your review</span>
+      </div>
+
+      <div class="c-cols">
+        <aside class="c-left" aria-label="What the draft was built from">
+          <div class="box2">
+            <h2>LATEST NUMBERS</h2>
+            <div class="nums">
+              <div><b>61.4</b><span>FB mph</span></div>
+              <div><b>66%</b><span>Strikes</span></div>
+              <div><b>1,180</b><span>Drop rpm</span></div>
+            </div>
+          </div>
+          <div class="box2"><h2>HER GOALS</h2><p>Sharper drop for the December showcase. Hold velocity into the 6th and 7th innings.</p></div>
+          <div class="box2"><h2>HER WEEK</h2><p>Team practice Mon / Wed / Thu. School strength class Tue. Tournaments most Saturdays.</p></div>
+          <div class="box2 quiet">
+            <h2>SOURCES USED</h2>
+            <ul>
+              <li>Intake form</li>
+              <li>6 bullpen logs (Sep 21 – Oct 11)</li>
+              <li>OnForm review, Oct 9</li>
+              <li>Your lesson notes, Oct 10: "Stride lands closed; drop spins off-axis late in pens."</li>
+            </ul>
+          </div>
+        </aside>
+
+        <section class="c-mid" aria-label="Draft plan">
+          <div class="row" style="flex-wrap:wrap">
+            <h2 style="font-size:18px;font-weight:800">Draft plan</h2>
+            <span class="c-sub" style="font-size:13px">Drafted by Claude from her data · edit anything</span>
+          </div>
+
+          <article class="wk">
+            <div class="row" style="align-items:flex-start;flex-wrap:wrap"><div><span class="kick">Week 1</span><h3>Clean up the stride</h3></div><button class="ghost">Regenerate week</button></div>
+            <div class="trio">
+              <div><b>PITCHING</b><span>K-position holds daily. Stride-line drill 3 × 10. Two short pens, 35 pitches.</span></div>
+              <div><b>STRENGTH</b><span>Single-leg stability, 2 sessions. Skip Tuesday; school class covers it.</span></div>
+              <div><b>FUELING</b><span>Pre-practice snack timing. Water bottle check-ins.</span></div>
+            </div>
+          </article>
+          <article class="wk">
+            <div class="row" style="align-items:flex-start;flex-wrap:wrap"><div><span class="kick">Week 2</span><h3>Drop spin on-axis</h3></div><button class="ghost">Regenerate week</button></div>
+            <div class="trio">
+              <div><b>PITCHING</b><span>Spin ladder 3 × 20. Drop spin reps off the stride line. Two pens, 40 pitches.</span></div>
+              <div><b>STRENGTH</b><span>Hip drive and rotational med ball, 2 sessions.</span></div>
+              <div><b>FUELING</b><span>Tournament-day plan: what to eat between games.</span></div>
+            </div>
+          </article>
+          <article class="wk">
+            <div class="row" style="align-items:flex-start;flex-wrap:wrap"><div><span class="kick">Week 3</span><h3>Velocity late in games</h3></div><button class="ghost">Regenerate week</button></div>
+            <div class="trio">
+              <div><b>PITCHING</b><span>Back-half pen: 15 hard, short rest, 15 hard. Track velo drop-off.</span></div>
+              <div><b>STRENGTH</b><span>Lower-body power, 2 sessions. Nothing heavy Friday.</span></div>
+              <div><b>FUELING</b><span>Recovery after doubleheaders.</span></div>
+            </div>
+          </article>
+          <article class="wk">
+            <div class="row" style="align-items:flex-start;flex-wrap:wrap"><div><span class="kick">Week 4</span><h3>Deload + test pen</h3></div><button class="ghost">Regenerate week</button></div>
+            <div class="trio">
+              <div><b>PITCHING</b><span>Light volume. Test pen Friday: velo, strike %, drop break on video.</span></div>
+              <div><b>STRENGTH</b><span>One mobility session.</span></div>
+              <div><b>FUELING</b><span>Showcase-week routine.</span></div>
+            </div>
+          </article>
+        </section>
+
+        <aside class="c-right" aria-label="Your review">
+          <div class="review">
+            <h2>YOUR REVIEW</h2>
+            <label><input type="checkbox" checked> <span>Workload fits her week</span></label>
+            <label><input type="checkbox" checked> <span>No hard pitching the day before a tournament</span></label>
+            <label><input type="checkbox"> <span>Drill cues use my language</span></label>
+            <button class="approve" id="approve">Approve &amp; assign to Maya</button>
+            <button class="outline">Edit plan</button>
+            <p class="small">Nothing reaches Maya until you approve it.</p>
+          </div>
+          <div class="box2 quiet">
+            <h2>AFTER APPROVAL</h2>
+            <p style="color:var(--soft);font-size:13px">The plan appears on her "My custom plan" card. Her logs feed her progress charts, and week 4's test pen sets up the next block.</p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  /* screen switching */
+  var tabs=[].slice.call(document.querySelectorAll('.tab'));
+  function show(id){
+    ['home','progress','coach'].forEach(function(s){
+      document.getElementById(s).classList.toggle('on', s===id);
+    });
+    tabs.forEach(function(t){t.setAttribute('aria-selected', t.dataset.go===id ? 'true':'false');});
+    if(location.hash!=='#'+id) history.replaceState(null,'','#'+id);
+    window.scrollTo(0,0);
+  }
+  document.addEventListener('click',function(e){
+    var el=e.target.closest('[data-go]');
+    if(el) show(el.dataset.go);
+  });
+  var start=(location.hash||'#home').slice(1);
+  show(['home','progress','coach'].indexOf(start)>-1 ? start : 'home');
+
+  /* today checklist */
+  var tasks=[].slice.call(document.querySelectorAll('#tasks .task'));
+  function updateDone(){
+    var n=tasks.filter(function(t){return t.classList.contains('done');}).length;
+    document.getElementById('doneLabel').textContent=n+' of '+tasks.length+' done';
+    document.getElementById('doneBar').style.width=Math.round(n/tasks.length*100)+'%';
+  }
+  tasks.forEach(function(t){
+    t.addEventListener('click',function(){
+      var on=t.classList.toggle('done');
+      t.setAttribute('aria-pressed', on ? 'true':'false');
+      updateDone();
+    });
+  });
+
+  /* range toggle */
+  var seg=[].slice.call(document.querySelectorAll('#seg button'));
+  seg.forEach(function(b){
+    b.addEventListener('click',function(){
+      seg.forEach(function(x){x.setAttribute('aria-pressed', x===b ? 'true':'false');});
+    });
+  });
+
+  /* practice calendar */
+  var pattern=[1,0,1,1,0,1,0, 1,1,0,1,0,1,0, 1,0,1,1,1,1,0, 1,1,1,0,1,1,0];
+  var cal=document.getElementById('cal');
+  pattern.forEach(function(p){var i=document.createElement('i'); if(p) i.className='p'; cal.appendChild(i);});
+
+  /* approve */
+  var ap=document.getElementById('approve'), st=document.getElementById('status'), ok=false;
+  ap.addEventListener('click',function(){
+    ok=!ok;
+    ap.classList.toggle('ok',ok); st.classList.toggle('ok',ok);
+    ap.textContent= ok ? 'Assigned to Maya' : 'Approve & assign to Maya';
+    st.textContent= ok ? 'Approved · live on her app' : 'Draft · needs your review';
+  });
+})();
+</script>
+</body>
+</html>
