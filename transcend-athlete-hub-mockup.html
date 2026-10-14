@@ -162,6 +162,41 @@ h1,h2,h3,p{margin:0}
 .small{font-size:12px;line-height:1.5;color:var(--soft)}
 
 .foot{text-align:center;font-size:12px;color:var(--mute);margin-top:18px;padding:0 16px}
+
+/* session report */
+.tabs{flex-wrap:nowrap;overflow-x:auto;max-width:100%;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{white-space:nowrap;flex-shrink:0}
+@media (max-width:480px){.tab{font-size:12px;padding:0 10px}.switch-title{width:100%}}
+.ages{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;background:var(--panel);border:1px solid rgba(255,255,255,.08);border-radius:999px;padding:4px}
+.ages button{min-height:40px;border:0;border-radius:999px;background:transparent;color:var(--soft);font-weight:700;font-size:13px}
+.ages button[aria-pressed="true"]{background:var(--mag);color:#fff;font-weight:800}
+.help{font-size:12px;color:var(--mute);font-weight:600;line-height:1.45}
+.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.tile{background:var(--card);border:1px solid var(--edge);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:4px}
+.tile .lab{font-size:12px;font-weight:700;color:var(--soft)}
+.tile .val{font-size:28px;font-weight:800;letter-spacing:-.03em}
+.tile .val small{font-size:13px;color:var(--mute);font-weight:700}
+.tile .sub{font-size:12px;color:var(--mute);font-weight:600}
+.q{display:flex;flex-direction:column;gap:8px;padding:12px 0;border-top:1px solid rgba(255,255,255,.07)}
+.q:first-of-type{border-top:0;padding-top:0}
+.q-head{display:flex;justify-content:space-between;align-items:baseline}
+.q-head b{font-size:15px;font-weight:800}
+.q-score{font-size:26px;font-weight:800;color:var(--mag-lt);letter-spacing:-.03em}
+.meter{display:grid;grid-template-columns:78px 1fr 66px;gap:10px;align-items:center;font-size:12px;font-weight:600;color:var(--soft)}
+.track{height:8px;border-radius:8px;background:rgba(255,255,255,.1);position:relative;overflow:hidden}
+.track span{position:absolute;left:0;top:0;bottom:0;background:var(--mag-lt);border-radius:8px}
+.meter .num{text-align:right;color:#fff;font-weight:700}
+.empty{background:var(--panel);border:1px dashed rgba(255,255,255,.22);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:4px}
+.empty b{font-size:14px;font-weight:800}
+.empty span{font-size:13px;color:var(--soft);line-height:1.45}
+.analysis{background:var(--raise);border:1px solid rgba(206,85,182,.45);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.analysis ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}
+.analysis li,.analysis p{font-size:14px;line-height:1.5}
+.analysis .focus{background:var(--panel);border-radius:12px;padding:12px;font-size:14px;line-height:1.5}
+.draft{font-size:11px;font-weight:800;letter-spacing:.06em;color:var(--void);background:var(--mag-lt);padding:3px 8px;border-radius:999px}
+.notes li{font-size:13px;color:var(--soft);line-height:1.5}
+[hidden]{display:none!important}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -173,6 +208,7 @@ h1,h2,h3,p{margin:0}
     <div class="tabs" role="tablist" aria-label="Preview screens">
       <button class="tab" role="tab" data-go="home" aria-selected="true">Athlete home</button>
       <button class="tab" role="tab" data-go="progress" aria-selected="false">Progress</button>
+      <button class="tab" role="tab" data-go="session" aria-selected="false">Session report</button>
       <button class="tab" role="tab" data-go="coach" aria-selected="false">Coach review</button>
     </div>
   </div>
@@ -356,6 +392,125 @@ h1,h2,h3,p{margin:0}
   </div>
 </section>
 
+<!-- ===================== SESSION REPORT (real PitchLogic data) ===================== -->
+<section class="screen" id="session" aria-label="Session report">
+  <div class="phone">
+    <div class="ph-body">
+      <div class="row">
+        <button class="back" data-go="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>Home</button>
+        <span class="date" style="font-size:12px;font-weight:700">Real PitchLogic data</span>
+      </div>
+      <div>
+        <h1 class="hello" style="margin:0">Session report</h1>
+        <div class="date" style="margin-top:4px">Aug 21, 2026 · 57 pitches: 19 fastballs, 38 change-ups</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="ages" role="group" aria-label="Show metrics for age group" id="ages">
+          <button aria-pressed="false" data-age="10U">10U</button>
+          <button aria-pressed="false" data-age="12U">12U</button>
+          <button aria-pressed="true" data-age="14U">14U</button>
+          <button aria-pressed="false" data-age="16U">16U</button>
+          <button aria-pressed="false" data-age="18U">18U</button>
+        </div>
+        <p class="help">Switch age groups to see how the page changes. Jiana chooses which metrics each age group sees.</p>
+      </div>
+
+      <div class="duo">
+        <div class="tile">
+          <span class="lab">Fastball</span>
+          <span class="val">54.0 <small>mph</small></span>
+          <span class="sub">Median of top 10 · max 55.3</span>
+        </div>
+        <div class="tile">
+          <span class="lab">Change-up</span>
+          <span class="val">42.5 <small>mph</small></span>
+          <span class="sub">Median of top 10 · max 44.4</span>
+        </div>
+      </div>
+
+      <div class="panel" data-min="12">
+        <div class="row"><span class="kick">Pitch quality</span><span class="help">Sample benchmarks</span></div>
+        <div class="q">
+          <div class="q-head"><b>Fastball</b><span class="q-score" id="fbScore">62</span></div>
+          <div class="meter"><span>Velocity</span><span class="track"><span id="fbVeloBar"></span></span><span class="num">54.0 mph</span></div>
+          <div class="meter"><span>Drop</span><span class="track"><span id="fbDropBar"></span></span><span class="num">8.7 in</span></div>
+        </div>
+        <div class="q">
+          <div class="q-head"><b>Change-up</b><span class="q-score" id="chScore">88</span></div>
+          <div class="meter"><span>Speed gap</span><span class="track"><span id="chGapBar"></span></span><span class="num">79%</span></div>
+          <div class="meter"><span>Drop</span><span class="track"><span id="chDropBar"></span></span><span class="num">9.9 in</span></div>
+        </div>
+        <p class="help" id="bandNote">Velocity compared to a sample 14U range of 48–58 mph. Jiana sets the real ranges.</p>
+      </div>
+
+      <div class="panel" data-min="12">
+        <div class="row" style="align-items:flex-end">
+          <div><div class="kick">Change-up speed</div><div class="big">79% <small>of fastball</small></div></div>
+          <span class="chip">In the sweet spot</span>
+        </div>
+        <svg class="chart" viewBox="0 0 348 84" role="img" aria-label="Change-up speed is 79 percent of fastball speed, inside a sample sweet-spot band of 75 to 82 percent.">
+          <rect x="10" y="30" width="328" height="16" rx="8" fill="rgba(255,255,255,.08)"/>
+          <rect x="92" y="30" width="115" height="16" rx="3" fill="rgba(206,85,182,.35)"/>
+          <line x1="158" y1="20" x2="158" y2="56" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+          <text x="158" y="14" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">79%</text>
+          <text x="92" y="72" text-anchor="middle" fill="#CE55B6" font-size="10" font-weight="700">75%</text>
+          <text x="207" y="72" text-anchor="middle" fill="#CE55B6" font-size="10" font-weight="700">82%</text>
+          <text x="10" y="72" fill="#B29CAC" font-size="10">70%</text>
+          <text x="338" y="72" text-anchor="end" fill="#B29CAC" font-size="10">90%</text>
+        </svg>
+        <p class="help">Too slow and hitters have time to adjust. Too fast and it's a slow fastball. Same arm slot on both pitches (5:44), so they look alike out of the hand.</p>
+      </div>
+
+      <div class="panel">
+        <div class="row"><span class="kick">Fastball, pitch by pitch</span><span class="help">dashed = top-10 median</span></div>
+        <svg class="chart" id="fbLine" viewBox="0 0 348 170" role="img" aria-label="Fastball velocity for each of 19 fastballs, ranging from 48.7 to 55.3 mph and settling around 54 mph late in the session."></svg>
+        <p class="help">Erratic early, then locked in at 53.8–54.1 for the last four. No fade at the end.</p>
+      </div>
+
+      <div class="panel" data-min="12">
+        <div class="row"><span class="kick">Speed vs. drop</span><span class="help">every pitch</span></div>
+        <svg class="chart" id="scatter" viewBox="0 0 348 210" role="img" aria-label="Scatter plot of speed against drop. Fastballs cluster at 51 to 55 mph with 8 to 10 inches of drop. Change-ups cluster at 38 to 44 mph with 9 to 11 inches of drop. Two change-ups read as rising and are flagged as likely misreads."></svg>
+        <div class="legend"><span><i style="background:#CE55B6"></i>Fastball</span><span><i style="background:#F3EDF1"></i>Change-up</span><span><i style="border:2px solid #B29CAC;background:none;border-radius:50%"></i>Likely misread</span></div>
+      </div>
+
+      <div class="empty">
+        <b>Strike %</b>
+        <span>PitchLogic tracks how the ball moves, not balls and strikes. Add a quick tap-per-pitch chart during the next bullpen to fill this in.</span>
+      </div>
+
+      <div class="empty" data-min="14">
+        <b>Whiff rate</b>
+        <span>Needs live hitters. Comes in from GameChanger game data once connected.</span>
+      </div>
+
+      <div class="panel" data-min="18">
+        <div class="kick">Consistency</div>
+        <div class="duo">
+          <div><div class="big">74%</div><span class="help">of fastballs within 2 mph of her best (14 of 19)</span></div>
+          <div><div class="big">55%</div><span class="help">of change-ups within 2 mph of her best (21 of 38)</span></div>
+        </div>
+      </div>
+
+      <div class="analysis">
+        <div class="row"><span class="kick">Why you're good</span><span class="draft">DRAFT · JIANA REVIEWS</span></div>
+        <ul id="strengths"></ul>
+        <div class="focus" id="focus"></div>
+      </div>
+
+      <div class="panel" style="background:var(--panel)">
+        <span class="kick">Data notes</span>
+        <ul class="notes" style="margin:0;padding-left:18px">
+          <li>2 duplicate readings removed (59 rows in the file, 57 pitches).</li>
+          <li>2 change-ups read as rising at 31–34 mph. Flagged as likely misreads, left out of movement numbers.</li>
+          <li>Blank fields (shown as 0 in the export) treated as missing, not zero.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <p class="foot">Built from the PL06-082126 PitchLogic export. Quality scores and bands use sample benchmarks.</p>
+</section>
+
 <!-- ===================== COACH REVIEW ===================== -->
 <section class="screen" id="coach" aria-label="Coach custom plan review">
   <div class="coach">
@@ -465,19 +620,102 @@ h1,h2,h3,p{margin:0}
   /* screen switching */
   var tabs=[].slice.call(document.querySelectorAll('.tab'));
   function show(id){
-    ['home','progress','coach'].forEach(function(s){
+    ['home','progress','session','coach'].forEach(function(s){
       document.getElementById(s).classList.toggle('on', s===id);
     });
     tabs.forEach(function(t){t.setAttribute('aria-selected', t.dataset.go===id ? 'true':'false');});
-    if(location.hash!=='#'+id) history.replaceState(null,'','#'+id);
+    if(location.hash!=='#v-'+id) history.replaceState(null,'','#v-'+id);
     window.scrollTo(0,0);
   }
   document.addEventListener('click',function(e){
     var el=e.target.closest('[data-go]');
     if(el) show(el.dataset.go);
   });
-  var start=(location.hash||'#home').slice(1);
-  show(['home','progress','coach'].indexOf(start)>-1 ? start : 'home');
+  var start=(location.hash||'#v-home').replace('#v-','').replace('#','');
+  show(['home','progress','session','coach'].indexOf(start)>-1 ? start : 'home');
+
+  /* ---------- session report: real PL06-082126 data ---------- */
+  var NS='http://www.w3.org/2000/svg';
+  function el(tag,attrs,text){var e=document.createElementNS(NS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);if(text!=null)e.textContent=text;return e;}
+
+  var FB=[[50.8,9.9],[52.1,9.9],[51.6,9.3],[48.7,10.4],[55.3,8.6],[54.0,8.9],[52.9,9.2],[54.0,9.9],[54.6,8.9],[51.4,9.3],[52.2,8.8],[51.2,9.4],[54.0,7.6],[52.5,10.8],[52.5,8.2],[53.8,9.8],[53.8,8.1],[53.8,8.1],[54.1,8.2]];
+  var CH=[[42.0,10.7],[40.5,10.9],[39.3,10.1],[41.6,9.5],[44.4,9.9],[38.7,12.2],[43.3,10.0],[36.9,10.6],[38.0,10.3],[39.4,8.9],[42.6,9.1],[42.4,10.5],[34.2,-9.2],[40.5,9.3],[40.1,8.8],[41.3,9.3],[39.7,9.8],[39.1,9.3],[42.5,9.3],[41.6,9.5],[37.9,9.4],[34.1,9.6],[42.0,9.0],[34.9,10.7],[41.7,9.1],[42.1,9.0],[41.9,10.5],[40.1,10.0],[41.8,8.7],[41.6,8.3],[37.9,4.8],[42.4,11.4],[30.9,-9.4],[40.7,9.9],[37.3,10.4],[43.0,10.1],[42.3,10.1],[39.9,9.4]];
+
+  /* fastball line */
+  var line=document.getElementById('fbLine');
+  function yv(v){return 150-(v-47)*130/9;}
+  [48,50,52,54,56].forEach(function(v){
+    line.appendChild(el('line',{x1:28,y1:yv(v),x2:338,y2:yv(v),stroke:'rgba(255,255,255,.08)'}));
+    line.appendChild(el('text',{x:0,y:yv(v)+4,fill:'#B29CAC','font-size':10},String(v)));
+  });
+  line.appendChild(el('line',{x1:28,y1:yv(54),x2:338,y2:yv(54),stroke:'#CE55B6','stroke-width':1.5,'stroke-dasharray':'4 5'}));
+  var pts=FB.map(function(p,i){return (30+i*(306/18)).toFixed(1)+','+yv(p[0]).toFixed(1);}).join(' ');
+  line.appendChild(el('polyline',{points:pts,fill:'none',stroke:'#F3EDF1','stroke-width':2.5,'stroke-linejoin':'round','stroke-linecap':'round'}));
+  FB.forEach(function(p,i){line.appendChild(el('circle',{cx:30+i*(306/18),cy:yv(p[0]),r:3.5,fill:p[0]>=53.8?'#CE55B6':'#F3EDF1'}));});
+  line.appendChild(el('text',{x:30,y:166,fill:'#B29CAC','font-size':10},'Pitch 1'));
+  line.appendChild(el('text',{x:336,y:166,'text-anchor':'end',fill:'#B29CAC','font-size':10},'Pitch 19'));
+
+  /* speed vs drop scatter */
+  var sc=document.getElementById('scatter');
+  function sx(v){return 34+(v-30)*(304/26);}
+  function sy(d){return 180-(d+10)*(166/23);}
+  [0,5,10].forEach(function(d){
+    sc.appendChild(el('line',{x1:34,y1:sy(d),x2:338,y2:sy(d),stroke:d===0?'rgba(255,255,255,.2)':'rgba(255,255,255,.08)'}));
+    sc.appendChild(el('text',{x:0,y:sy(d)+4,fill:'#B29CAC','font-size':10},d+'"'));
+  });
+  sc.appendChild(el('text',{x:0,y:sy(-8)+4,fill:'#B29CAC','font-size':10},'rise'));
+  [30,40,50].forEach(function(v){sc.appendChild(el('text',{x:sx(v),y:202,'text-anchor':'middle',fill:'#B29CAC','font-size':10},v+' mph'));});
+  sc.appendChild(el('text',{x:338,y:sy(12),'text-anchor':'end',fill:'#B29CAC','font-size':10},'more drop ↑'));
+  CH.forEach(function(p){
+    var bad=p[1]<0;
+    sc.appendChild(el('circle',bad?{cx:sx(p[0]),cy:sy(p[1]),r:4.5,fill:'none',stroke:'#B29CAC','stroke-width':2}:{cx:sx(p[0]),cy:sy(p[1]),r:4,fill:'#F3EDF1','fill-opacity':.85}));
+  });
+  FB.forEach(function(p){sc.appendChild(el('circle',{cx:sx(p[0]),cy:sy(p[1]),r:4,fill:'#CE55B6'}));});
+
+  /* age-group logic (sample benchmarks — Jiana sets the real ones) */
+  var BANDS={10:[38,48],12:[44,54],14:[48,58],16:[52,62],18:[55,65]};
+  var fbV=54.0, fbD=8.7, chD=9.9, gap=79;
+  function clamp(x){return Math.max(0,Math.min(1,x));}
+  var dropPos=function(d){return clamp((d-3)/9);};
+  var gapFit= (gap>=75&&gap<=82) ? 1 : clamp(1-Math.min(Math.abs(gap-75),Math.abs(gap-82))/10);
+
+  function applyAge(age){
+    var n=parseInt(age,10), b=BANDS[n], vPos=clamp((fbV-b[0])/(b[1]-b[0]));
+    document.querySelectorAll('#session [data-min]').forEach(function(x){x.hidden = n < parseInt(x.dataset.min,10);});
+    var fbScore=Math.round(50*vPos+50*dropPos(fbD)), chScore=Math.round(50*gapFit+50*dropPos(chD));
+    document.getElementById('fbScore').textContent=fbScore;
+    document.getElementById('chScore').textContent=chScore;
+    document.getElementById('fbVeloBar').style.width=Math.round(vPos*100)+'%';
+    document.getElementById('fbDropBar').style.width=Math.round(dropPos(fbD)*100)+'%';
+    document.getElementById('chGapBar').style.width=Math.round(gapFit*100)+'%';
+    document.getElementById('chDropBar').style.width=Math.round(dropPos(chD)*100)+'%';
+    document.getElementById('bandNote').textContent='Velocity compared to a sample '+age+' range of '+b[0]+'–'+b[1]+' mph. Jiana sets the real ranges.';
+
+    var s=[];
+    if(fbV>b[1]) s.push('Your fastball (54 mph, top-10 median) is above the '+age+' range we track. That is real power for your age.');
+    else if(vPos>=0.5) s.push('Your fastball (54 mph, top-10 median) sits in the upper half of the '+age+' range.');
+    else s.push('Your fastball (54 mph, top-10 median) is building toward the top of the '+age+' range.');
+    if(n>=12){
+      s.push('Your fastball drops 8.7 inches, so hitters see a hard pitch that keeps diving under the barrel.');
+      s.push('Your change-up arrives at 79% of your fastball speed with 9.9 inches of drop, from the same arm slot. It looks like a fastball and gets there late.');
+    }
+    if(n>=18) s.push('14 of 19 fastballs were within 2 mph of your best. You are repeating your top delivery most of the time.');
+    var f;
+    if(n===10) f='<b>Next focus:</b> strikes. Chart your next bullpen so we can track strike % alongside your velocity.';
+    else if(n===12) f='<b>Next focus:</b> this fastball/change-up pair is your weapon. Make both sharper before adding a third pitch.';
+    else if(n<18) f='<b>Next focus:</b> keep building the two-pitch combo, and bring in game data so we can see how many swings you are missing.';
+    else f='<b>Next focus:</b> consistency on the change-up. 21 of 38 landed within 2 mph of your best; tightening that is what recruiters notice.';
+    document.getElementById('strengths').innerHTML=s.map(function(t){return '<li>'+t+'</li>';}).join('');
+    document.getElementById('focus').innerHTML=f;
+  }
+  var ageBtns=[].slice.call(document.querySelectorAll('#ages button'));
+  ageBtns.forEach(function(btn){
+    btn.addEventListener('click',function(){
+      ageBtns.forEach(function(x){x.setAttribute('aria-pressed',x===btn?'true':'false');});
+      applyAge(btn.dataset.age);
+    });
+  });
+  applyAge('14U');
 
   /* today checklist */
   var tasks=[].slice.call(document.querySelectorAll('#tasks .task'));
